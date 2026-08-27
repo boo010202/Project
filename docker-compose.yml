@@ -1,0 +1,66 @@
+services:
+  mariadb:
+    image: mariadb:11
+    container_name: e-utilities-mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: e_utilities_cost
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: e-utilities-phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+    ports:
+      - "8081:80"
+    depends_on:
+      - mariadb
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: boodev/e-utilities-cost-backend:latest
+    container_name: e-utilities-backend
+    restart: always
+    environment:
+      DB_HOST: mariadb
+      DB_PORT: 3306
+      DB_NAME: e_utilities_cost
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      PORT: 3000
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+      REFRESH_TOKEN_EXPIRES_IN: ${REFRESH_TOKEN_EXPIRES_IN}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mariadb
+    volumes:
+      - backend_uploads:/app/uploads
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: boodev/e-utilities-cost-frontend:latest
+    container_name: e-utilities-frontend
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+volumes:
+  mariadb_data:
+  backend_uploads:
