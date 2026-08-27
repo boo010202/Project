@@ -1,89 +1,164 @@
-# ระบบควบคุมและติดตามค่าสาธารณูปโภค (e-utilities-cost)
-### Utility Expense Tracking & Control System
+# e-utilities-cost — ระบบควบคุมและติดตามค่าสาธารณูปโภค
 
-ระบบเว็บแอปพลิเคชันสำหรับบันทึก ติดตาม และสรุปรายงานค่าสาธารณูปโภคของหน่วยงานหรือสถานศึกษา ซึ่งพัฒนาขึ้นเพื่อรองรับการเบิกจ่ายงบประมาณจากหลายหมวดเงินงบประมาณ พร้อมทั้งนำเสนอข้อมูลสถิติในรูปแบบแดชบอร์ดกราฟที่เข้าใจง่าย และสามารถใช้งานได้แบบ Responsive บนอุปกรณ์คอมพิวเตอร์ แท็บเล็ต และมือถือ
+ระบบเว็บแอปพลิเคชันสำหรับบันทึก ติดตาม และสรุปรายงานค่าสาธารณูปโภคของหน่วยงาน/สถานศึกษา
 
----
+## ภาพรวมระบบ
 
-## 🌟 ฟีเจอร์หลัก (Core Features)
-1. **ระบบสมาชิกและสิทธิ์การใช้งาน (Authentication & Authorization)**
-   - เข้าสู่ระบบและออกจากระบบผ่าน JWT (Access Token & HttpOnly Cookie Refresh Token)
-   - ป้องกันสิทธิ์การเข้าถึง API และหน้าเพจผ่าน Middleware และ Navigation Guard
-   - แบ่งบทบาทผู้ใช้งานเป็น `admin` และ `staff`
-2. **ระบบจัดการประเภทค่าใช้จ่าย (Expense Categories CRUD)**
-   - เพิ่ม ลบ แก้ไข และเปิด/ปิดใช้งานประเภทค่าใช้จ่าย (เช่น ค่าไฟฟ้า, ค่าน้ำประปา, ค่าอินเทอร์เน็ต)
-3. **ระบบจัดการหมวดเงินงบประมาณ (Budget Categories CRUD)**
-   - เพิ่ม ลบ แก้ไข และเปิด/ปิดใช้งานแหล่งเงินเบิกจ่าย (เช่น งบประมาณ ปวช., งบประมาณ ปวส., เงินรายได้สถานศึกษา)
-4. **ระบบบันทึกรายการค่าใช้จ่ายจริง (Utility Expense Management CRUD)**
-   - บันทึกยอดเงินค่าสาธารณูปโภค ผูกกับประเภทค่าใช้จ่ายและหมวดเงินเบิกจ่าย
-   - สามารถระบุรอบบิล วันที่จ่ายเงิน เลขที่ใบแจ้งหนี้ หมายเหตุ และอัปโหลดไฟล์แนบหลักฐาน (ใบเสร็จ)
-5. **แดชบอร์ดสรุปยอดและรายงาน (Dashboard & Report)**
-   - การ์ดสรุปผลยอดรวมรายเดือน อัตราการเปลี่ยนแปลง เปรียบเทียบยอดรวมรายปี
-   - กราฟแสดงสถิติต่างๆ: รายเดือนย้อนหลัง, สัดส่วนแยกตามประเภท (Pie Chart), ยอดเงินสะสมแยกตามหมวดงบประมาณ (Stacked Bar Chart)
-   - หน้ารายงานย้อนหลังสำหรับการตรวจสอบข้อมูลและการเปรียบเทียบปีต่อปี พร้อมทั้งสั่งพิมพ์หรือบันทึกรายงาน
-6. **การออกแบบ Responsive Design**
-   - รองรับการแสดงผลทุกหน้าจอกระชับ ทันสมัย และสวยงาม (Desktop Sidebar, Tablet Collapsible, Mobile Drawer / Bottom Nav)
-   - ปรับการแสดงผลตารางข้อมูลขนาดใหญ่ให้เป็นรูปแบบการ์ดอัตโนมัติบนมือถือ
+| Feature | รายละเอียด |
+|---|---|
+| 🔐 Authentication | JWT Access Token + Refresh Token (httpOnly Cookie) |
+| 👥 Users | Admin / Staff roles |
+| ⚡ Expense Categories | ประเภทค่าใช้จ่าย (ไฟฟ้า, น้ำ, อินเตอร์เน็ต ฯลฯ) |
+| 💰 Budget Categories | หมวดเงินงบประมาณ (ปวช./ปวส./เงินรายได้) |
+| 📋 Expenses | CRUD รายการค่าใช้จ่ายพร้อมแนบไฟล์ใบเสร็จ |
+| 📊 Dashboard | กราฟสรุปยอดรายเดือน, แยกประเภท, แยกหมวดเงิน |
+| 📈 Reports | เปรียบเทียบค่าใช้จ่ายระหว่างปี |
+| 📱 Responsive | รองรับ Desktop, Tablet, Mobile |
 
 ---
 
-## 🛠️ เทคโนโลยี (Tech Stack)
-- **Backend**: Node.js + Express.js + Sequelize ORM + bcrypt + jsonwebtoken
-- **Frontend**: Vue 3 (Composition API) + Vite + Tailwind CSS + Pinia + Vue Router + Chart.js + Axios
-- **Database**: MariaDB + phpMyAdmin (สำหรับจัดการฐานข้อมูลในสภาพแวดล้อมพัฒนา)
-- **Deployment**: Docker + Docker Compose + Docker Hub
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Backend** | Node.js + Express.js |
+| **Frontend** | Vue 3 (Composition API) + Vite + Tailwind CSS |
+| **Database** | MariaDB 11 |
+| **ORM** | Sequelize |
+| **Auth** | JWT (jsonwebtoken) + bcryptjs |
+| **Charts** | Chart.js + vue-chartjs |
+| **State** | Pinia |
+| **Container** | Docker + Docker Compose |
 
 ---
 
-## 🚀 วิธีการติดตั้งและรันระบบ (Setup & Running)
+## การรันด้วย Docker Compose (แนะนำ)
 
-### 1. เตรียมความพร้อมของระบบ
-ก่อนอื่น ให้แน่ใจว่าระบบของคุณมีการติดตั้ง:
-- Node.js (แนะนำเวอร์ชัน 18 ขึ้นไป)
-- Docker Desktop หรือ Docker Compose
-
-### 2. ตั้งค่าไฟล์สภาพแวดล้อม (Environment Variables)
-คัดลอกไฟล์ `.env.example` ไปเป็น `.env` ทั้งในส่วนของ root และปรับแต่งค่าตามความเหมาะสม:
 ```bash
+# 1. คัดลอกไฟล์ environment
 cp .env.example .env
-```
-และระบุค่าสำหรับการเชื่อมต่อฐานข้อมูลและคีย์ลับของ JWT เช่น:
-```env
-# Database
-DB_HOST=mariadb
-DB_PORT=3306
-DB_NAME=e_utilities_cost
-DB_USER=app_user
-DB_PASSWORD=changeme
-DB_ROOT_PASSWORD=changeme_root
 
-# Backend Configuration
-PORT=3000
-JWT_SECRET=your_super_secret_jwt_key
-JWT_EXPIRES_IN=1h
-REFRESH_TOKEN_EXPIRES_IN=7d
+# 2. แก้ไขค่าใน .env ตามต้องการ
+# (โดยเฉพาะ JWT_SECRET, DB_PASSWORD)
 
-# Frontend Configuration
-VITE_API_BASE_URL=http://localhost:3000/api
-```
-
-### 3. รันระบบผ่าน Docker Compose (สำหรับการใช้งานในพื้นที่พัฒนา)
-สั่งทำงานผ่าน Docker Compose:
-```bash
+# 3. รัน services ทั้งหมด
 docker compose up -d
+
+# 4. เข้าใช้งาน
+# Frontend:  http://localhost:8080
+# Backend:   http://localhost:3000
+# phpMyAdmin: http://localhost:8081
 ```
-แอปพลิเคชันจะเปิดขึ้นและพร้อมใช้งานที่:
-- **Frontend**: [http://localhost:8080](http://localhost:8080)
-- **Backend API**: [http://localhost:3000/api](http://localhost:3000/api)
-- **phpMyAdmin**: [http://localhost:8081](http://localhost:8081)
 
 ---
 
-## 🛡️ ข้อมูลบัญชีผู้ใช้สำหรับการทดสอบเริ่มต้น (Test Accounts)
-ระบบจะทำการ Seed บัญชีและข้อมูลประเภทค่าสาธารณูปโภค/หมวดเงินงบประมาณให้โดยอัตโนมัติในครั้งแรกที่รันระบบ:
-- **สิทธิ์ Admin**:
-  - Username: `admin`
-  - Password: `admin1234`
-- **สิทธิ์ Staff**:
-  - Username: `staff`
-  - Password: `staff1234`
+## การรันแบบ Development
+
+### Prerequisites
+- Node.js 20+
+- MariaDB / MySQL (ท้องถิ่น หรือ Docker)
+
+### Backend
+```bash
+cd backend
+cp ../.env.example ../.env   # ปรับค่า DB_HOST=localhost
+npm install
+npm run dev
+# Server: http://localhost:3000
+```
+
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+# App: http://localhost:5173
+```
+
+---
+
+## Docker Hub Images
+
+| Image | Tag |
+|---|---|
+| `boodev/e-utilities-cost-backend` | `latest` |
+| `boodev/e-utilities-cost-frontend` | `latest` |
+
+### Build & Push
+```bash
+# Build images
+docker build -t boodev/e-utilities-cost-backend:latest ./backend
+docker build -t boodev/e-utilities-cost-frontend:latest ./frontend
+
+# Push to Docker Hub
+docker login
+docker push boodev/e-utilities-cost-backend:latest
+docker push boodev/e-utilities-cost-frontend:latest
+```
+
+---
+
+## บัญชีผู้ใช้ Default (Seed Data)
+
+| Username | Password | Role |
+|---|---|---|
+| `admin` | `admin1234` | Admin (CRUD ทุกอย่าง) |
+| `staff` | `staff1234` | Staff (เพิ่ม/ดูรายการ) |
+
+> ⚠️ กรุณาเปลี่ยนรหัสผ่านก่อนใช้งานจริง
+
+---
+
+## โครงสร้างโปรเจกต์
+
+```
+e-utilities-cost/
+├── backend/
+│   ├── src/
+│   │   ├── config/db.js
+│   │   ├── controllers/  (auth, expense, category, dashboard)
+│   │   ├── models/       (User, Expense, ExpenseCategory, BudgetCategory)
+│   │   ├── routes/       (auth, expense, category, dashboard)
+│   │   ├── middlewares/  (auth, error)
+│   │   ├── app.js
+│   │   └── server.js
+│   ├── Dockerfile
+│   └── package.json
+├── frontend/
+│   ├── src/
+│   │   ├── views/        (Login, Dashboard, ExpenseList, ExpenseForm, CategoryManage, Report)
+│   │   ├── components/layout/ (Sidebar, Navbar, MobileMenu)
+│   │   ├── stores/       (auth, expense, category)
+│   │   ├── services/     (api.js, auth.service.js)
+│   │   └── router/
+│   ├── Dockerfile
+│   ├── nginx.conf
+│   └── package.json
+├── docker-compose.yml
+├── .env.example
+└── plan.md
+```
+
+---
+
+## API Endpoints
+
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| POST | `/api/auth/login` | ❌ | เข้าสู่ระบบ |
+| POST | `/api/auth/logout` | ✅ | ออกจากระบบ |
+| POST | `/api/auth/refresh` | Cookie | Refresh token |
+| GET | `/api/auth/me` | ✅ | ข้อมูล user |
+| GET | `/api/expense-categories` | ✅ | ดูประเภทค่าใช้จ่าย |
+| POST | `/api/expense-categories` | Admin | เพิ่มประเภท |
+| GET | `/api/budget-categories` | ✅ | ดูหมวดเงิน |
+| GET | `/api/expenses` | ✅ | รายการค่าใช้จ่าย |
+| POST | `/api/expenses` | ✅ | เพิ่มรายการ |
+| GET | `/api/dashboard/summary` | ✅ | สรุปรายเดือน |
+| GET | `/api/dashboard/by-category` | ✅ | แยกตามประเภท |
+| GET | `/api/dashboard/compare` | ✅ | เปรียบเทียบปี |
+
+---
+
+## License
+MIT License
