@@ -1,0 +1,56 @@
+e-utilities-cost/
+├── backend/
+│   ├── src/
+│   │   ├── config/
+│   │   │   └── db.js
+│   │   ├── models/
+│   │   │   ├── user.model.js
+│   │   │   ├── expenseCategory.model.js
+│   │   │   ├── budgetCategory.model.js
+│   │   │   └── expense.model.js
+│   │   ├── controllers/
+│   │   │   ├── auth.controller.js
+│   │   │   ├── expense.controller.js
+│   │   │   ├── expenseCategory.controller.js
+│   │   │   ├── budgetCategory.controller.js
+│   │   │   └── dashboard.controller.js
+│   │   ├── routes/
+│   │   │   ├── auth.routes.js
+│   │   │   ├── expense.routes.js
+│   │   │   ├── category.routes.js
+│   │   │   └── dashboard.routes.js
+│   │   ├── middlewares/
+│   │   │   ├── auth.middleware.js
+│   │   │   └── error.middleware.js
+│   │   ├── app.js
+│   │   └── server.js
+│   ├── .env.example
+│   ├── Dockerfile
+│   └── package.json
+├── frontend/
+│   ├── src/
+│   │   ├── assets/
+│   │   ├── components/
+│   │   │   ├── layout/
+│   │   │   ├── charts/
+│   │   │   └── forms/
+│   │   ├── views/
+│   │   │   ├── LoginView.vue
+│   │   │   ├── DashboardView.vue
+│   │   │   ├── ExpenseListView.vue
+│   │   │   ├── ExpenseFormView.vue
+│   │   │   ├── CategoryManageView.vue
+│   │   │   └── ReportHistoryView.vue
+│   │   ├── stores/
+│   │   ├── router/
+│   │   ├── services/
+│   │   │   └── api.js
+│   │   ├── App.vue
+│   │   └── main.js
+│   ├── Dockerfile
+│   ├── nginx.conf
+│   ├── tailwind.config.js
+│   └── package.json
+├── docker-compose.yml
+├── .env.example
+└── plan.md
